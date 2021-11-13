@@ -84,7 +84,7 @@ export default class Orientation {
 
   static setUnspecifiedOrientation = () => {
     locked = false;
-    OrientationNative.sesetUnspecifiedOrientationt();
+    OrientationNative.setUnspecifiedOrientation();
   };
 
   static addOrientationListener = (cb) => {
