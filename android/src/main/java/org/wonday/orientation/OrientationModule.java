@@ -316,6 +316,34 @@ public class OrientationModule extends ReactContextBaseJavaModule implements Ori
     }
 
     @ReactMethod
+    public void setUnspecifiedOrientation() {
+
+        final Activity activity = getCurrentActivity();
+        if (activity == null) return;
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        isLocked = false;
+
+        //force send an UI orientation event when unlock
+        lastOrientationValue = lastDeviceOrientationValue;
+        WritableMap params = Arguments.createMap();
+        params.putString("orientation", lastOrientationValue);
+        if (ctx.hasActiveCatalystInstance()) {
+            ctx
+            .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+            .emit("orientationDidChange", params);
+        }
+
+        // send a unlocked event
+        WritableMap lockParams = Arguments.createMap();
+        lockParams.putString("orientation", "UNKNOWN");
+        if (ctx.hasActiveCatalystInstance()) {
+            ctx
+            .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+            .emit("lockDidChange", lockParams);
+        }
+    }
+
+    @ReactMethod
     public void getAutoRotateState(Callback callback) {
       final ContentResolver resolver = ctx.getContentResolver();
       boolean rotateLock = android.provider.Settings.System.getInt(
