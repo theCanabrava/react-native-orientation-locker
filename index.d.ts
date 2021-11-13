@@ -67,6 +67,8 @@ declare class Orientation {
 
   static unlockAllOrientations(): void;
 
+  static setUnspecifiedOrientation(): void;
+
   static getOrientation(callback: (orientation: OrientationType) => void): void;
 
   static getDeviceOrientation(callback: (orientation: OrientationType) => void): void;
